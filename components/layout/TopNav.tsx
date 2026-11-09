@@ -85,6 +85,7 @@ export function TopNav() {
           </div>
         </div>
       </div>
+      <p className="px-4 pb-1.5 -mt-1 text-[10px] text-zinc-400">Portfolio demo - fictional data</p>
     </header>
   );
 }

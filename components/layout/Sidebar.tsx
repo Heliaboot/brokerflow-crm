@@ -33,7 +33,7 @@ export function Sidebar() {
   const avatarColor = role === "agent" ? "bg-violet-500" : "bg-emerald-600";
 
   return (
-    <aside className="hidden md:flex flex-col w-60 shrink-0 bg-zinc-950 min-h-screen">
+    <aside className="hidden md:flex flex-col w-60 shrink-0 bg-zinc-950 h-screen sticky top-0">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-zinc-800">
         <div className="flex items-center gap-2.5">
@@ -77,7 +77,7 @@ export function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
+      <nav className="flex-1 min-h-0 overflow-y-auto px-3 py-4 space-y-0.5">
         {navItems.map(({ href, label, icon }) => {
           const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
           return (
@@ -125,6 +125,7 @@ export function Sidebar() {
             <p className="text-[10px] text-zinc-400 truncate">{userLabel}</p>
           </div>
         </div>
+        <p className="px-3 pt-2 text-[10px] text-zinc-500">Portfolio demo - fictional data</p>
       </div>
     </aside>
   );

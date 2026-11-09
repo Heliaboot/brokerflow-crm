@@ -1,3 +1,5 @@
+> *Portfolio demo.* BrokerFlow is a demo I (Helia Boutorabi, Business Analyst, Visiona Insights) designed and built to showcase my business analysis work: requirements, pipeline design, business rules and reporting. All leads, agents, phone numbers and figures are fictional and exist only to demonstrate the product. Changes you make are saved only in your own browser; use Reset Demo to restore the original data.
+
 # BrokerFlow CRM
 
 A working CRM prototype for a Toronto residential brokerage, designed around how a brokerage actually runs: five lead pipelines, each with its own stages, conversion point, checklists and regulatory compliance steps.
@@ -197,4 +199,4 @@ lib/
 
 ## License
 
-All rights reserved. This is a portfolio sample; please contact me before reusing any part of it.
+© 2026 Helia Boutorabi / Visiona Insights. All rights reserved. Portfolio sample; please contact me before reusing any part of it.
