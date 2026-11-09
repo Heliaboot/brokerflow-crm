@@ -10,7 +10,7 @@
  */
 export const STORAGE_KEY = "brokerflow_crm";
 export const LEGACY_STORAGE_KEYS: string[] = [];
-export const STORE_VERSION = 12;
+export const STORE_VERSION = 13;
 
 /**
  * Inline script run in <body> before React hydrates. Removes saved data whose
