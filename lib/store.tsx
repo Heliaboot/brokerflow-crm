@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import {
   mockLeads, mockActivities, mockReminders, mockShowings,
   mockOfferRounds, mockAcceptedOffers, mockOfferConditions, mockChecklistItems,
@@ -99,7 +99,8 @@ interface StoreValue extends StoreState {
   addBuyerOfferThread: (thread: BuyerOfferThread) => void;
   updateBuyerOfferThread: (id: string, patch: Partial<BuyerOfferThread>) => void;
   // Reset
-  resetStore: () => void;
+  /** Restores the demo data, then reloads the page (or navigates to `redirectTo`). */
+  resetStore: (redirectTo?: string) => void;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -130,6 +131,9 @@ const defaultState: StoreState = {
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<StoreState>(defaultState);
   const [hydrated, setHydrated] = useState(false);
+
+  // Set by resetStore(); stops the save effect from writing old state back.
+  const resettingRef = useRef(false);
 
   // Load saved demo data once, after mount. This is a deliberate exception to
   // react-hooks/set-state-in-effect: localStorage only exists in the browser, so
@@ -181,7 +185,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
-    if (!hydrated) return;
+    // Once a reset has started, never write the old in-memory state back.
+    if (!hydrated || resettingRef.current) return;
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ __version: STORE_VERSION, ...state })); } catch {}
   }, [state, hydrated]);
 
@@ -383,11 +388,13 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const updateBuyerOfferThread = (id: string, patch: Partial<BuyerOfferThread>) =>
     setState((p) => ({ ...p, buyerOfferThreads: p.buyerOfferThreads.map((t) => t.id === id ? { ...t, ...patch } : t) }));
 
-  const resetStore = () => {
-    // Write defaultState to localStorage synchronously before reload so the
-    // pending save effect can't race and write stale data back.
+  const resetStore = (redirectTo?: string) => {
+    // Block the save effect first, then write defaultState synchronously, so the
+    // in-memory (old) state can't be written back before the page goes away.
+    resettingRef.current = true;
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ __version: STORE_VERSION, ...defaultState })); } catch {}
-    location.reload();
+    if (redirectTo) location.replace(redirectTo);
+    else location.reload();
   };
 
   return (
