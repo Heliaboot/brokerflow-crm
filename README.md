@@ -119,8 +119,9 @@ Designed for a production build on a hosted Postgres backend with row-level secu
 npm install
 npm run dev
 ```
+▶ Live demo: <https://brokerflow-crm-nine.vercel.app/>
 
-Open <http://localhost:3000>.
+or Open <http://localhost:3000>.
 
 - **Agent / Manager** — switch roles in the sidebar. The agent view shows one demo agent's leads; the manager view adds Business Overview, Admin Queue and Reports.
 - **Your changes are saved** in the browser's `localStorage` and survive reloads.
