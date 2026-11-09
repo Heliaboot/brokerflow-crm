@@ -91,11 +91,9 @@ GCI assumptions:
 | Screen | Placeholder |
 |---|---|
 | Agent dashboard — overdue first contact, pipeline by stage | `![Agent dashboard](docs/screens/agent-dashboard.png)` |
-| Lead detail — Buyer in active search, offer threads | `![Buyer lead](docs/screens/lead-buyer.png)` |
-| Lead detail — Seller pre-listing checklist and listing agreement | `![Seller lead](docs/screens/lead-seller.png)` |
+| Lead detail — listed Seller with listing agreement and offers | `![Seller lead](docs/screens/lead-seller.png)` |
 | Buyer agreement step with the *Regulatory compliance step* tag | `![Compliance step](docs/screens/compliance-step.png)` |
-| Exit paths — Not Now / Inactive / Pause | `![Exit paths](docs/screens/exit-paths.png)` |
-| Manager dashboard and Reports | `![Reports](docs/screens/reports.png)` |
+| Reports — stages incl. *Not Now (nurture)*, agent table | `![Reports](docs/screens/reports.png)` |
 | Business Overview (owner view) | `![Business Overview](docs/screens/business-overview.png)` |
 
 ## 5. Tech stack
@@ -156,20 +154,14 @@ lib/
   types.ts                 Data model (stage keys, leads, offers, listings, leases…)
   constants.ts             Stage display names, conversion helper, checklists, loss reasons
   business-metrics.ts      GCI estimates and Business Overview metrics
+  report-metrics.ts        Live Reports / Manager dashboard metrics
   store.tsx                Client-side store (stands in for the backend)
   storage-config.ts        Storage key + STORE_VERSION shared with the purge script
   mock-data.ts             Fictional demo leads, activities, reminders
   role-context.tsx         Agent / Manager demo role
+  use-now.ts               Reads the current time once per page (keeps rendering pure)
   contact-attempt.ts, utils.ts
 ```
-
-## Known limitations
-
-- **No real backend or login.** All data lives in the viewer's browser (`localStorage`). The Agent / Manager switch is a demo toggle, not authentication.
-- **Demo data is relative to today.** Dates in `lib/mock-data.ts` are calculated when the page loads, so the dashboards always show recent activity. "Reset Demo" reloads it.
-- **GCI figures are estimates** wherever no price is recorded: they fall back to the expected listing price or the midpoint of the lead's budget.
-- **Flat-fee commissions** such as "$5,000" aren't parsed; they fall back to the 2.5% listing-side default.
-- **No historical snapshots.** Trends are rebuilt from created/updated dates, not stored monthly values.
 
 ## 7. Reusable for another client vs client-specific
 
@@ -189,3 +181,20 @@ lib/
 - **Checklist task names and loss reasons** in `lib/constants.ts` (they name the client's back-office system generically today).
 - **Lead sources, property types, currency and locale** (`en-CA`, CAD formatting).
 - **Which pipelines exist** — e.g. a brokerage without rentals or recruiting would drop those.
+
+## Known limitations
+
+- **No real backend or login.** All data lives in the viewer's browser (`localStorage`). The Agent / Manager switch is a demo toggle, not authentication.
+- **Demo data is relative to today.** Dates in `lib/mock-data.ts` are calculated when the page loads, so the dashboards always show recent activity. "Reset Demo" reloads it.
+- **GCI figures are estimates** wherever no price is recorded: they fall back to the expected listing price or the midpoint of the lead's budget.
+- **Flat-fee commissions** such as "$5,000" aren't parsed; they fall back to the 2.5% listing-side default.
+- **No historical snapshots.** Trends are rebuilt from created/updated dates, not stored monthly values.
+
+## How this was built
+
+- **Business analysis (me):** I defined the requirements, the pipeline design, the business rules and the specifications, and reviewed the results against them.
+- **Code (AI-assisted):** the prototype code was built with Claude Code, Anthropic's AI coding assistant. I directed the work, tested each change in the running app and approved it before it was kept.
+
+## License
+
+All rights reserved. This is a portfolio sample; please contact me before reusing any part of it.
