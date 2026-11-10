@@ -2,6 +2,7 @@
 
 import { useStore } from "@/lib/store";
 import { Card } from "@/components/ui/Card";
+import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import {
   getActivePipelineValue,
   getClosedDeals,
@@ -127,6 +128,8 @@ export default function BusinessOverviewPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
+      <WelcomeBanner />
+
       {/* Header */}
       <div>
         <h1 className="text-xl font-semibold text-zinc-900">Business Overview</h1>

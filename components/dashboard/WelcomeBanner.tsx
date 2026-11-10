@@ -2,14 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useRole } from "@/lib/role-context";
 import { WELCOME_BANNER_DISMISSED_KEY } from "@/lib/storage-config";
 import { cn } from "@/lib/utils";
 
 const GITHUB_URL = "https://github.com/Heliaboot/brokerflow-crm";
+const BUSINESS_OVERVIEW_HREF = "/business-overview";
 /** Listed seller with a listing agreement: a good first lead to look at. */
 const SHOWCASE_LEAD_HREF = "/leads/l12";
+/** Works from any page: goes to the home dashboard and jumps to its pipeline heading. */
+const PIPELINE_HREF = "/#pipeline";
 
 function readDismissed(): boolean {
   try {
@@ -21,22 +24,34 @@ function readDismissed(): boolean {
 
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700";
-const actionClass = cn(
-  "inline-flex items-center rounded-md border border-sky-200 bg-white px-2.5 py-1 text-xs font-medium text-sky-900 hover:bg-sky-100 transition-colors",
-  focusRing
-);
+
+/** Action pill; the one for the page you're on is filled. */
+function actionClass(current: boolean) {
+  return cn(
+    "inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+    current
+      ? "border-sky-700 bg-sky-700 text-white"
+      : "border-sky-200 bg-white text-sky-900 hover:bg-sky-100",
+    focusRing
+  );
+}
 
 /**
- * Home-page banner for recruiters / hiring managers: what this is, who made it,
- * and three quick things to try. Closable; the choice is remembered in
- * localStorage and cleared by Reset Demo.
+ * Banner for recruiters / hiring managers: what this is, who made it, and three
+ * quick things to try. Shown on the home dashboard, Business Overview and lead
+ * pages so visitors can keep exploring. Closable; the choice is remembered in
+ * localStorage (all pages) and cleared by Reset Demo.
  */
 export function WelcomeBanner({ className }: { className?: string }) {
   const { setRole } = useRole();
   const router = useRouter();
+  const pathname = usePathname();
   const [dismissed, setDismissed] = useState(readDismissed);
 
   if (dismissed) return null;
+
+  const onOverview = pathname === BUSINESS_OVERVIEW_HREF;
+  const onShowcaseLead = pathname === SHOWCASE_LEAD_HREF;
 
   const close = () => {
     setDismissed(true);
@@ -49,7 +64,7 @@ export function WelcomeBanner({ className }: { className?: string }) {
 
   const openBusinessOverview = () => {
     setRole("manager");
-    router.push("/business-overview");
+    if (!onOverview) router.push(BUSINESS_OVERVIEW_HREF);
   };
 
   return (
@@ -78,15 +93,24 @@ export function WelcomeBanner({ className }: { className?: string }) {
           </p>
           <div className="flex flex-wrap items-center gap-2 pt-0.5">
             <span className="text-xs font-medium text-zinc-700">Try this:</span>
-            <button type="button" onClick={openBusinessOverview} className={actionClass}>
+            <button
+              type="button"
+              onClick={openBusinessOverview}
+              aria-current={onOverview ? "page" : undefined}
+              className={actionClass(onOverview)}
+            >
               See the owner&apos;s Business Overview
             </button>
-            <Link href={SHOWCASE_LEAD_HREF} className={actionClass}>
+            <Link
+              href={SHOWCASE_LEAD_HREF}
+              aria-current={onShowcaseLead ? "page" : undefined}
+              className={actionClass(onShowcaseLead)}
+            >
               Open a seller lead
             </Link>
-            <a href="#pipeline" className={actionClass}>
+            <Link href={PIPELINE_HREF} className={actionClass(false)}>
               See the pipeline
-            </a>
+            </Link>
           </div>
         </div>
         <button
