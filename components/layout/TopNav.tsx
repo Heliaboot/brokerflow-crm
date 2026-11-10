@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useRole, AGENT_INITIALS, MANAGER_INITIALS } from "@/lib/role-context";
-import { STORAGE_KEY } from "@/lib/storage-config";
+import { STORAGE_KEY, WELCOME_BANNER_DISMISSED_KEY } from "@/lib/storage-config";
 
 const AGENT_NAV = [
   { href: "/", label: "Dashboard" },
@@ -69,7 +69,7 @@ export function TopNav() {
         {/* Role switcher + reset + avatar */}
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={() => { localStorage.removeItem(STORAGE_KEY); location.reload(); }}
+            onClick={() => { try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(WELCOME_BANNER_DISMISSED_KEY); } catch {} location.reload(); }}
             className="text-[10px] text-zinc-500 border border-zinc-200 px-2 py-1 rounded-md hover:bg-zinc-50 whitespace-nowrap"
           >
             ↺ Reset

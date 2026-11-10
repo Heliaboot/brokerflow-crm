@@ -14,7 +14,7 @@ import type { Lead, Activity, Reminder, Showing, OfferRound, AcceptedOffer, Offe
 // STORAGE_KEY / STORE_VERSION live in storage-config.ts, shared with the
 // pre-hydration purge script in app/layout.tsx. Bump the version there whenever
 // mock-data.ts or the state shape changes; a mismatch loads fresh defaults.
-import { STORAGE_KEY, STORE_VERSION, LEGACY_STORAGE_KEYS } from "./storage-config";
+import { STORAGE_KEY, STORE_VERSION, LEGACY_STORAGE_KEYS, WELCOME_BANNER_DISMISSED_KEY } from "./storage-config";
 
 interface StoreState {
   leads: Lead[];
@@ -393,6 +393,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     // in-memory (old) state can't be written back before the page goes away.
     resettingRef.current = true;
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ __version: STORE_VERSION, ...defaultState })); } catch {}
+    try { localStorage.removeItem(WELCOME_BANNER_DISMISSED_KEY); } catch {} // bring the welcome banner back
     if (redirectTo) location.replace(redirectTo);
     else location.reload();
   };

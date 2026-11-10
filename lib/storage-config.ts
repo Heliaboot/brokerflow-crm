@@ -12,6 +12,9 @@ export const STORAGE_KEY = "brokerflow_crm";
 export const LEGACY_STORAGE_KEYS: string[] = [];
 export const STORE_VERSION = 13;
 
+/** Set to "1" when the viewer closes the home-page welcome banner. Cleared by Reset Demo. */
+export const WELCOME_BANNER_DISMISSED_KEY = "brokerflow_welcome_dismissed";
+
 /**
  * Inline script run in <body> before React hydrates. Removes saved data whose
  * __version does not match STORE_VERSION (or that cannot be parsed), plus any

@@ -95,7 +95,7 @@ export function ManagerDashboard() {
       {/* Pipeline overview */}
       <Card padding="md">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Pipeline Overview</h2>
+          <h2 id="pipeline" className="scroll-mt-24 text-sm font-semibold text-zinc-900">Pipeline Overview</h2>
           <Link href="/leads" className="text-xs text-zinc-400 hover:text-zinc-700">
             View all →
           </Link>
